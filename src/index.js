@@ -202,19 +202,6 @@ const {directionToWorldCoords} = (function directionToWorldCoordsFunction() {
 
       initialized = initialized || initialize(THREE);
 
-      cameraPositionToVec3(aframeCamera, cameraPosAsVec3);
-      direction.set(directionX, directionY, directionZ);
-
-      // A line from the camera position toward (and through) the plane
-      const newPosition = rayPlaneIntersection(
-        camera.getWorldDirection(),
-        depth,
-        direction
-      );
-
-      // Reposition back to the camera position
-      const {x, y, z} = newPosition.add(cameraPosAsVec3);
-
       return {x, y, z};
 
     },
@@ -280,19 +267,6 @@ const {selectItem} = (function selectItemFunction() {
       if (!intersected) {
         return {};
       }
-
-      const {point, object} = intersected;
-
-      // Aligned to the world direction of the camera
-      // At the specified intersection point
-      plane.setFromNormalAndCoplanarPoint(
-        camera.components.camera.camera.getWorldDirection().clone().negate(),
-        point.clone().sub(cameraPosAsVec3)
-      );
-
-      const depth = plane.constant;
-
-      const offset = point.sub(object.getWorldPosition());
 
       return {depth, offset, element: object.el};
 
